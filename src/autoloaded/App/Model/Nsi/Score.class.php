@@ -76,33 +76,22 @@ class Score {
                     dt,
                     stars_count,
                     title,
-                    IF(
-                        (challenge_id, dt) IN (
+                    CASE
+                        WHEN (challenge_id, dt) IN (
                             SELECT
                                 challenge_id, MIN(dt)
                             FROM
-                                api_nsi_stars
-                            JOIN
-                                api_nsi_profiles
-                            ON
-                                api_nsi_stars.username = api_nsi_profiles.username
+                                api_nsi_stars JOIN api_nsi_profiles ON api_nsi_stars.username = api_nsi_profiles.username
                             WHERE
                                 displayable = 1
                             GROUP BY challenge_id
-                        ),
-                        "DIAMOND",
-                        IF(
-                            CURRENT_TIMESTAMP() < gold_deadline_dt,
-                            "GOLD",
-                            "BASIC"
-                        )
-                    ) AS specialty
+                        ) THEN "DIAMOND"
+                        WHEN CURRENT_TIMESTAMP() < gold_deadline_dt THEN "GOLD"
+                        ELSE "BASIC"
+                    END AS specialty
                 FROM
-                    api_nsi_stars
-                        JOIN
-                    api_nsi_challenges
-                        ON api_nsi_stars.challenge_id = api_nsi_challenges.id
-                WHERE username IN ($marker_str)
+                    api_nsi_stars JOIN api_nsi_challenges ON api_nsi_stars.challenge_id = api_nsi_challenges.id
+                WHERE username IN ('toto', 'lulu')
             )
                 UNION
             (
@@ -114,10 +103,7 @@ class Score {
                     title,
                     "SPECIAL"
                 FROM
-                    api_nsi_special_stars
-                        JOIN
-                    api_nsi_events
-                        ON api_nsi_special_stars.event_id = api_nsi_events.id
+                    api_nsi_special_stars JOIN api_nsi_events ON api_nsi_special_stars.event_id = api_nsi_events.id
             );
             EOF
         )->execute(array_keys($best_scores));
