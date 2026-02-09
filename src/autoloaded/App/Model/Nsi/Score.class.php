@@ -104,6 +104,7 @@ class Score {
                     "SPECIAL"
                 FROM
                     api_nsi_special_stars JOIN api_nsi_events ON api_nsi_special_stars.event_id = api_nsi_events.id
+                WHERE username IN ('toto', 'lulu')
             );
             EOF
         )->execute(array_keys($best_scores));
