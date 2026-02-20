@@ -91,7 +91,7 @@ class Score {
                     END AS specialty
                 FROM
                     api_nsi_stars JOIN api_nsi_challenges ON api_nsi_stars.challenge_id = api_nsi_challenges.id
-                WHERE username IN ('toto', 'lulu')
+                WHERE username IN ($marker_str)
             )
                 UNION
             (
