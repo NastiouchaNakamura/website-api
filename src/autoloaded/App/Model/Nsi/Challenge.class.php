@@ -10,7 +10,6 @@ class Challenge {
     public string $flag;
     public string $stars_count;
     public string $title;
-    public DateTime $diamond_deadline_dt;
     public DateTime $gold_deadline_dt;
 
     public static function fetch(string $id): Challenge|null {
@@ -23,7 +22,6 @@ class Challenge {
                 flag,
                 stars_count,
                 title,
-                diamond_deadline_dt,
                 gold_deadline_dt
             FROM
                 api_nsi_challenges
@@ -39,7 +37,6 @@ class Challenge {
             $challenge->flag = $responses[0]->flag;
             $challenge->stars_count = $responses[0]->stars_count;
             $challenge->title = $responses[0]->title;
-            $challenge->diamond_deadline_dt = new DateTime($responses[0]->diamond_deadline_dt);
             $challenge->gold_deadline_dt = new DateTime($responses[0]->gold_deadline_dt);
             return $challenge;
         }
